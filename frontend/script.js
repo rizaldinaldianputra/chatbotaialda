@@ -1,12 +1,13 @@
 const chatForm = document.getElementById('chat-form');
 const userInput = document.getElementById('user-input');
 const chatBox = document.getElementById('chat-box');
-const API_URL = 'http://localhost:5000/api/chat';
+const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+const API_URL = `${API_BASE}/api/chat`;
 
 // Fetch history on load
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const response = await fetch('http://localhost:5000/api/messages');
+        const response = await fetch(`${API_BASE}/api/messages`);
         if (response.ok) {
             const messages = await response.json();
             // Clear default welcome if there is history

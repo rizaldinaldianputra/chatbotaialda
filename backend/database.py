@@ -1,7 +1,11 @@
 import sqlite3
 import os
 
-DB_PATH = os.path.join(os.path.dirname(__file__), 'chat.db')
+# Gunakan /tmp di Vercel karena filesystemnya read-only
+if os.environ.get('VERCEL') or os.environ.get('AWS_EXECUTION_ENV'):
+    DB_PATH = '/tmp/chat.db'
+else:
+    DB_PATH = os.path.join(os.path.dirname(__file__), 'chat.db')
 
 def init_db():
     conn = sqlite3.connect(DB_PATH)
