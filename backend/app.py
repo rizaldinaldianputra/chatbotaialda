@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from database import init_db, get_connection
+from database import init_db, get_connection, execute_query
 import os
 import google.generativeai as genai
 from dotenv import load_dotenv
@@ -40,13 +40,13 @@ def chat():
     cursor = conn.cursor()
     
     # Save user message
-    cursor.execute('INSERT INTO messages (role, content) VALUES (?, ?)', ('user', user_message))
+    execute_query(cursor, 'INSERT INTO messages (role, content) VALUES (?, ?)', ('user', user_message))
     
     # Simple rule-based response for Alda (since we don't have an AI API key yet)
     alda_response = generate_alda_response(user_message)
     
     # Save Alda's response
-    cursor.execute('INSERT INTO messages (role, content) VALUES (?, ?)', ('assistant', alda_response))
+    execute_query(cursor, 'INSERT INTO messages (role, content) VALUES (?, ?)', ('assistant', alda_response))
     
     conn.commit()
     conn.close()
